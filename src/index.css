@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme{
+  --color-softWhite:#F8FAFC;
+  --color-charcoalBlack:#0F0F0F;
+  --color-vibrantOrange:#FF5E13;
+}
+
+@layer components{
+  .view-more{
+    @apply bg-black text-white p-1.5 rounded-xl transition duration-300 hover:scale-110
+  }
+}
+
+@layer base{
+  button{
+    @apply cursor-pointer
+  }
+  input{
+    @apply outline-0 border-0
+  }
+}
