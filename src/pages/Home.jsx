@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { supabase } from "../supabase";
 
@@ -6,6 +7,10 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [products, setProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [sortBy, setSortBy] = useState("newest");
+    const [searchParams,setSearchParams] = useSearchParams();
+    const searchQuery = searchParams.get("search")||"";
 
     async function fetchProducts() {
         try {
@@ -27,12 +32,24 @@ const Home = () => {
         fetchProducts()
     },[])
 
+    const categories = ["All",...new Set(products.map(p=>p.category).filter(Boolean))];
+
+    const filteredProducts = products.filter((product)=>{
+        const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
+        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+    }).sort((a,b)=>{
+        if(sortBy ==="lowest to highest") return Number(a.price) - Number(b.price);
+        if(sortBy ==="highest to lowest")return Number(b.price) - Number(a.price);
+        return 0
+    })
+
  
   return (
     <div className="min-h-screen w-full bg-softWhite text-charcoalBlack">
         <div className="text-center">
             <h1 className="font-bold text-3xl tracking-tight">Online <span className="text-vibrantOrange">Store</span></h1>
-            <p className="text-slate-600">Browse our least collections</p>
+            <p className="text-slate-600">Browse our latest collections</p>
         </div>
         {/* Loading Skeleton */}
         {loading && (
@@ -48,9 +65,9 @@ const Home = () => {
           </div>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-2">
-            {products.map((product)=>{
+            {products !== "" ? products.map((product)=>{
                 return <ProductCard product={product} key={product.id}/>
-            })}
+            }):null}
         </div>
     </div>
   )
