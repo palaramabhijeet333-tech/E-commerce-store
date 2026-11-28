@@ -4,10 +4,10 @@ import { supabase } from "../supabase";
 
 const ProductDetails = () => {
     const {id} = useParams();
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const outOfStock = product.stock_quantity <= 0;
+    const outOfStock = product?.stock_quantity <= 0;
 
     useEffect(()=>{
 
@@ -40,7 +40,7 @@ const ProductDetails = () => {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-2 animate-pulse">
           {/* Image placeholder */}
-          <div className="bg-slate-200 aspect-square md:aspect-auto md:h-[420px]" />
+          <div className="bg-slate-200 aspect-square md:aspect-auto md:h-105" />
 
           {/* Info placeholder */}
           <div className="flex flex-col justify-between p-6 md:p-8">
@@ -81,7 +81,7 @@ const ProductDetails = () => {
         }
 
         {
-            product !== "" && <div className="min-h-screen w-full bg-softWhite text-charcoalBlack py-6 px-4">
+            !loading && !error && product && <div className="min-h-screen w-full bg-softWhite text-charcoalBlack py-6 px-4">
                 
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto ">
                     {/*PRODUCT IMAGE */}

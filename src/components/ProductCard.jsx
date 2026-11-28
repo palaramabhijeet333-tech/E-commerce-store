@@ -7,6 +7,7 @@ const ProductCard = ({ product }) => {
             {/* IMAGE */}
             <Link to={`/product/${product.id}`} className="overflow-hidden block bg-slate-100 aspect-square">
                 <img src={product.image_url}
+                    loading="lazy"
                     alt={product.name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
             </Link>
